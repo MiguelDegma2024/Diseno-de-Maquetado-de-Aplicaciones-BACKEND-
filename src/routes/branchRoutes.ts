@@ -1,22 +1,22 @@
 import { Router } from "express";
 import {
-  /*createUser,*/
-  deleteUser,
-  getAllUsers,
-  getUserById,
-  /*modifyUser,*/
-} from "../controllers/userController";
+  /* createBranch,*/
+  deleteBranch,
+  getAllBranches,
+  getBranchById,
+  /*modifyBranch,*/
+} from "../controllers/branchController";
 
-const userRouter: Router = Router();
+const branchRouter: Router = Router();
 
-userRouter.get("/", getAllUsers);
+branchRouter.get("/", getAllBranches);
 
-userRouter.get("/:id", getUserById);
+branchRouter.get("/:id", getBranchById);
 
-/*userRouter.post("/", createUser);
+/*branchRouter.post("/", createBranch);
 
-userRouter.patch("/:id", modifyUser);*/
+branchRouter.patch("/:id", modifyBranch);*/
 
-userRouter.delete("/", deleteUser);
+branchRouter.delete("/", deleteBranch);
 
-export default userRouter;
+export default branchRouter;
