@@ -9,49 +9,50 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Product = void 0;
+exports.Branch = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
-let Product = class Product extends sequelize_typescript_1.Model {
+const user_1 = require("./user");
+let Branch = class Branch extends sequelize_typescript_1.Model {
 };
-exports.Product = Product;
-__decorate([
-    sequelize_typescript_1.Column,
-    __metadata("design:type", String)
-], Product.prototype, "title", void 0);
+exports.Branch = Branch;
 __decorate([
     (0, sequelize_typescript_1.Column)({
         type: sequelize_typescript_1.DataType.STRING,
+        allowNull: false,
     }),
     __metadata("design:type", String)
-], Product.prototype, "description", void 0);
+], Branch.prototype, "name", void 0);
 __decorate([
-    sequelize_typescript_1.Column,
-    __metadata("design:type", Number)
-], Product.prototype, "price", void 0);
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.STRING,
+        allowNull: false,
+    }),
+    __metadata("design:type", String)
+], Branch.prototype, "location", void 0);
 __decorate([
-    sequelize_typescript_1.Column,
+    (0, sequelize_typescript_1.ForeignKey)(() => user_1.User),
+    (0, sequelize_typescript_1.Column)({
+        type: sequelize_typescript_1.DataType.INTEGER,
+        allowNull: false,
+    }),
     __metadata("design:type", Number)
-], Product.prototype, "discountPercentage", void 0);
+], Branch.prototype, "managerId", void 0);
 __decorate([
-    sequelize_typescript_1.Column,
-    __metadata("design:type", Number)
-], Product.prototype, "rating", void 0);
-__decorate([
-    sequelize_typescript_1.Column,
-    __metadata("design:type", Number)
-], Product.prototype, "stock", void 0);
+    (0, sequelize_typescript_1.BelongsTo)(() => user_1.User),
+    __metadata("design:type", user_1.User)
+], Branch.prototype, "manager", void 0);
 __decorate([
     sequelize_typescript_1.CreatedAt,
     sequelize_typescript_1.Column,
     __metadata("design:type", Date)
-], Product.prototype, "createdAt", void 0);
+], Branch.prototype, "createdAt", void 0);
 __decorate([
     sequelize_typescript_1.UpdatedAt,
     sequelize_typescript_1.Column,
     __metadata("design:type", Date)
-], Product.prototype, "updatedAt", void 0);
-exports.Product = Product = __decorate([
+], Branch.prototype, "updatedAt", void 0);
+exports.Branch = Branch = __decorate([
     (0, sequelize_typescript_1.Table)({
-        tableName: "Products",
+        tableName: "Branches",
     })
-], Product);
+], Branch);
