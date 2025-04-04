@@ -9,36 +9,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.getUserById = exports.getAllUsers = void 0;
+exports.deleteUser = exports.modifyUser = exports.getUserById = exports.getAllUsers = exports.createUser = void 0;
 const user_1 = require("../models/user");
 // Crear un nuevo usuario
-/*export const createUser: RequestHandler = (req: Request, res: Response) => {
-  if (!req.body) {
-    return res.status(400).json({
-      status: "error",
-      message: "Content cannot be empty.",
-      payload: null,
-    });
-  }
-
-  const user = { ...req.body };
-  User.create(user)
-    .then((data: User | null) => {
-      res.status(200).json({
-        status: "success",
-        message: "User successfully created",
-        payload: data,
-      });
+const createUser = (req, res) => {
+    if (!req.body) {
+        res.status(400).json({
+            status: "error",
+            message: "Content cannot be empty.",
+            payload: null,
+        });
+    }
+    const user = Object.assign({}, req.body);
+    user_1.User.create(user)
+        .then((data) => {
+        res.status(200).json({
+            status: "success",
+            message: "User successfully created",
+            payload: data,
+        });
     })
-    .catch((err) => {
-      res.status(500).json({
-        status: "error",
-        message: "Something happened creating the user. " + err.message,
-        payload: null,
-      });
+        .catch((err) => {
+        res.status(500).json({
+            status: "error",
+            message: "Something happened creating the user. " + err.message,
+            payload: null,
+        });
     });
 };
-*/
+exports.createUser = createUser;
 // Obtener todos los usuarios
 const getAllUsers = (req, res) => {
     user_1.User.findAll()
@@ -85,39 +84,40 @@ const getUserById = (req, res) => {
 };
 exports.getUserById = getUserById;
 // Modificar usuario
-/*export const modifyUser: RequestHandler = (req: Request, res: Response) => {
-  if (!req.body) {
-    return res.status(400).json({
-      status: "error",
-      message: "Content cannot be empty.",
-      payload: null,
-    });
-  }
-
-  User.update({ ...req.body }, { where: { id: req.params.id } })
-    .then(([updated]) => {
-      if (updated) {
-        res.status(200).json({
-          status: "success",
-          message: "User successfully updated",
-          payload: { ...req.body },
+const modifyUser = (req, res) => {
+    if (!req.body) {
+        res.status(400).json({
+            status: "error",
+            message: "Content cannot be empty.",
+            payload: null,
         });
-      } else {
-        res.status(404).json({
-          status: "error",
-          message: "User not found",
-          payload: null,
-        });
-      }
+    }
+    user_1.User.update(Object.assign({}, req.body), { where: { id: req.params.id } })
+        .then(([updated]) => {
+        if (updated) {
+            res.status(200).json({
+                status: "success",
+                message: "User successfully updated",
+                payload: Object.assign({}, req.body),
+            });
+        }
+        else {
+            res.status(404).json({
+                status: "error",
+                message: "User not found",
+                payload: null,
+            });
+        }
     })
-    .catch((err) => {
-      res.status(500).json({
-        status: "error",
-        message: "Something happened updating the user. " + err.message,
-        payload: null,
-      });
+        .catch((err) => {
+        res.status(500).json({
+            status: "error",
+            message: "Something happened updating the user. " + err.message,
+            payload: null,
+        });
     });
-};*/
+};
+exports.modifyUser = modifyUser;
 // Eliminar usuario
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.body;

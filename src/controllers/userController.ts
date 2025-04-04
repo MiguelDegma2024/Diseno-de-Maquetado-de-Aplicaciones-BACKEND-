@@ -2,9 +2,9 @@ import { RequestHandler, Request, Response } from "express";
 import { User } from "../models/user";
 
 // Crear un nuevo usuario
-/*export const createUser: RequestHandler = (req: Request, res: Response) => {
+export const createUser: RequestHandler = (req: Request, res: Response) => {
   if (!req.body) {
-    return res.status(400).json({
+      res.status(400).json({
       status: "error",
       message: "Content cannot be empty.",
       payload: null,
@@ -28,7 +28,7 @@ import { User } from "../models/user";
       });
     });
 };
-*/
+
 // Obtener todos los usuarios
 export const getAllUsers: RequestHandler = (req: Request, res: Response) => {
   User.findAll()
@@ -75,9 +75,9 @@ export const getUserById: RequestHandler = (req: Request, res: Response) => {
 };
 
 // Modificar usuario
-/*export const modifyUser: RequestHandler = (req: Request, res: Response) => {
+export const modifyUser: RequestHandler = (req: Request, res: Response) => {
   if (!req.body) {
-    return res.status(400).json({
+      res.status(400).json({
       status: "error",
       message: "Content cannot be empty.",
       payload: null,
@@ -107,7 +107,7 @@ export const getUserById: RequestHandler = (req: Request, res: Response) => {
         payload: null,
       });
     });
-};*/
+};
 
 // Eliminar usuario
 export const deleteUser: RequestHandler = async (

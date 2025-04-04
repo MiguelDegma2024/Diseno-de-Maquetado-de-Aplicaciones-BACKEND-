@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize-typescript";
-import { Product } from "../src/models/product";
-import { User } from "../src/models/user";
-import { Branch } from "../src/models/branch";
+import { Product } from "../models/product";
+import { User } from "../models/user";
+import { Branch } from "../models/branch";
 
 const connection = new Sequelize({
   database: "sisweb_db",
