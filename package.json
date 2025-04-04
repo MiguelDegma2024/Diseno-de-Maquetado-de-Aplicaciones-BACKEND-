@@ -20,6 +20,7 @@
   "author": "Miguel De Jesus Degollado Macias",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "pg": "^8.14.1",
     "reflect-metadata": "^0.2.2",
@@ -27,6 +28,7 @@
     "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.13.17",
