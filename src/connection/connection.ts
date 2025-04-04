@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize-typescript";
-import { Product } from '../src/models/product';
+import { Product } from '../models/product';
 
 const connection = new Sequelize({
     database: 'sisweb_db',

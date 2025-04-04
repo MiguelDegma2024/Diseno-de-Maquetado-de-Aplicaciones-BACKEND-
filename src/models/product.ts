@@ -2,7 +2,7 @@ import {Table, Model, Column, CreatedAt, UpdatedAt, DataType} from 'sequelize-ty
 import {Optional} from 'sequelize';
 
 
-interface ProductAttributes{
+interface ProductAttributes{ 
 id: number;
 title: string;
 description: string;

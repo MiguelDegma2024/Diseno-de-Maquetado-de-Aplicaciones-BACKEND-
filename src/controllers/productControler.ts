@@ -95,7 +95,7 @@ export const modifyProduct:RequestHandler = (req: Request, res: Response) => {
                 payload: { ...req.body },
             });
         }   else {
-            return res.status(404).json({
+            return res.status(500).json({
                 status: "error",
                 message: "Something happened updating the product. " ,
                 payload: null,
@@ -126,5 +126,3 @@ export const deleteProduct: RequestHandler = async (req: Request,res: Response) 
         });
     }
 };
-
-

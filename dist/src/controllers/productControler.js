@@ -100,7 +100,7 @@ const modifyProduct = (req, res) => {
             });
         }
         else {
-            return res.status(404).json({
+            return res.status(500).json({
                 status: "error",
                 message: "Something happened updating the product. ",
                 payload: null,
