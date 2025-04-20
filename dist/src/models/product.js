@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Product = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
+const category_1 = require("./category");
 let Product = class Product extends sequelize_typescript_1.Model {
 };
 exports.Product = Product;
@@ -50,6 +51,15 @@ __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", Date)
 ], Product.prototype, "updatedAt", void 0);
+__decorate([
+    (0, sequelize_typescript_1.ForeignKey)(() => category_1.Category),
+    sequelize_typescript_1.Column,
+    __metadata("design:type", Number)
+], Product.prototype, "categoryId", void 0);
+__decorate([
+    (0, sequelize_typescript_1.BelongsTo)(() => category_1.Category),
+    __metadata("design:type", category_1.Category)
+], Product.prototype, "category", void 0);
 exports.Product = Product = __decorate([
     (0, sequelize_typescript_1.Table)({
         tableName: "Products",

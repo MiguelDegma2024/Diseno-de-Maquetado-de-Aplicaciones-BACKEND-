@@ -9,35 +9,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteBranch = exports.getBranchById = exports.getAllBranches = void 0;
+exports.deleteBranch = exports.modifyBranch = exports.getBranchById = exports.getAllBranches = exports.createBranch = void 0;
 const branch_1 = require("../models/branch");
 // Crear una nueva sucursal
-/*export const createBranch: RequestHandler = (req: Request, res: Response) => {
-  if (!req.body) {
-    return res.status(400).json({
-      status: "error",
-      message: "Content cannot be empty.",
-      payload: null,
-    });
-  }
-
-  const branch = { ...req.body };
-  Branch.create(branch)
-    .then((data: Branch | null) => {
-      res.status(200).json({
-        status: "success",
-        message: "Branch successfully created",
-        payload: data,
-      });
+const createBranch = (req, res) => {
+    if (!req.body) {
+        res.status(400).json({
+            status: "error",
+            message: "Content cannot be empty.",
+            payload: null,
+        });
+    }
+    const branch = Object.assign({}, req.body);
+    branch_1.Branch.create(branch)
+        .then((data) => {
+        res.status(200).json({
+            status: "success",
+            message: "Branch successfully created",
+            payload: data,
+        });
     })
-    .catch((err) => {
-      res.status(500).json({
-        status: "error",
-        message: "Something happened creating the branch. " + err.message,
-        payload: null,
-      });
+        .catch((err) => {
+        res.status(500).json({
+            status: "error",
+            message: "Something happened creating the branch. " + err.message,
+            payload: null,
+        });
     });
-};*/
+};
+exports.createBranch = createBranch;
 // Obtener todas las sucursales
 const getAllBranches = (req, res) => {
     branch_1.Branch.findAll()
@@ -84,39 +84,40 @@ const getBranchById = (req, res) => {
 };
 exports.getBranchById = getBranchById;
 // Modificar sucursal
-/*export const modifyBranch: RequestHandler = (req: Request, res: Response) => {
-  if (!req.body) {
-    return res.status(400).json({
-      status: "error",
-      message: "Content cannot be empty.",
-      payload: null,
-    });
-  }
-
-  Branch.update({ ...req.body }, { where: { id: req.params.id } })
-    .then(([updated]) => {
-      if (updated) {
-        res.status(200).json({
-          status: "success",
-          message: "Branch successfully updated",
-          payload: { ...req.body },
+const modifyBranch = (req, res) => {
+    if (!req.body) {
+        res.status(400).json({
+            status: "error",
+            message: "Content cannot be empty.",
+            payload: null,
         });
-      } else {
-        res.status(404).json({
-          status: "error",
-          message: "Branch not found",
-          payload: null,
-        });
-      }
+    }
+    branch_1.Branch.update(Object.assign({}, req.body), { where: { id: req.params.id } })
+        .then(([updated]) => {
+        if (updated) {
+            res.status(200).json({
+                status: "success",
+                message: "Branch successfully updated",
+                payload: Object.assign({}, req.body),
+            });
+        }
+        else {
+            res.status(404).json({
+                status: "error",
+                message: "Branch not found",
+                payload: null,
+            });
+        }
     })
-    .catch((err) => {
-      res.status(500).json({
-        status: "error",
-        message: "Something happened updating the branch. " + err.message,
-        payload: null,
-      });
+        .catch((err) => {
+        res.status(500).json({
+            status: "error",
+            message: "Something happened updating the branch. " + err.message,
+            payload: null,
+        });
     });
-};*/
+};
+exports.modifyBranch = modifyBranch;
 // Eliminar sucursal
 const deleteBranch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.body;

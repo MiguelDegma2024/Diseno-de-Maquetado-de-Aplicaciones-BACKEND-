@@ -1,9 +1,10 @@
 import { RequestHandler, Request, Response } from "express";           
 import { Product } from '../models/product';
+import { Category } from '../models/category'; // Importar el modelo Category
 
 
 // Create and Save a new Product
-export const createProduct: RequestHandler = (req: Request, res: Response) => {
+export const createProduct: RequestHandler = async (req: Request, res: Response) => {
     // Validate request
     if (!req.body) {
             res.status(400).json({
@@ -12,6 +13,19 @@ export const createProduct: RequestHandler = (req: Request, res: Response) => {
             payload: null,
         });
     }
+
+            // Verificar que la categoría existe
+            const { categoryId } = req.body;
+            if (categoryId) {
+                const category = await Category.findByPk(categoryId);
+                if (!category) {
+                        res.status(400).json({
+                        status: "error",
+                        message: "La categoría especificada no existe",
+                        payload: null,
+                    });
+                }
+            }
 // Save Product in the database
     const product = { ...req.body };
     Product.create(product)
@@ -35,9 +49,13 @@ export const createProduct: RequestHandler = (req: Request, res: Response) => {
 
 // Retrieve all Products from the database.
 export const getAllProducts: RequestHandler = (req: Request, res: Response) => {
-    //Calling the Sequelize findAll method. This is the same that a SELECT * FROM
-
-    Product.findAll()
+    // Incluir la relación con Category al obtener los productos
+    Product.findAll({
+        include: [{
+            model: Category,
+            attributes: ['id', 'name', 'key'] // Solo incluir los atributos necesarios
+        }]
+    })
         .then((data: Product[]) => {
             return res.status(200).json({
                 status: "success",
@@ -53,7 +71,6 @@ export const getAllProducts: RequestHandler = (req: Request, res: Response) => {
             });
         });
 };
-
 
 // Find a single Product with an id
 export const getProductById: RequestHandler = (req: Request, res: Response) => {

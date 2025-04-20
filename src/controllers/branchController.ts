@@ -2,9 +2,9 @@ import { RequestHandler, Request, Response } from "express";
 import { Branch } from "../models/branch";
 
 // Crear una nueva sucursal
-/*export const createBranch: RequestHandler = (req: Request, res: Response) => {
+export const createBranch: RequestHandler = (req: Request, res: Response) => {
   if (!req.body) {
-    return res.status(400).json({
+      res.status(400).json({
       status: "error",
       message: "Content cannot be empty.",
       payload: null,
@@ -27,7 +27,7 @@ import { Branch } from "../models/branch";
         payload: null,
       });
     });
-};*/
+};
 
 // Obtener todas las sucursales
 export const getAllBranches: RequestHandler = (req: Request, res: Response) => {
@@ -75,9 +75,9 @@ export const getBranchById: RequestHandler = (req: Request, res: Response) => {
 };
 
 // Modificar sucursal
-/*export const modifyBranch: RequestHandler = (req: Request, res: Response) => {
+export const modifyBranch: RequestHandler = (req: Request, res: Response) => {
   if (!req.body) {
-    return res.status(400).json({
+      res.status(400).json({
       status: "error",
       message: "Content cannot be empty.",
       payload: null,
@@ -107,7 +107,7 @@ export const getBranchById: RequestHandler = (req: Request, res: Response) => {
         payload: null,
       });
     });
-};*/
+};
 
 // Eliminar sucursal
 export const deleteBranch: RequestHandler = async (

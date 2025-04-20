@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize-typescript";
 import { Product } from "../models/product";
 import { User } from "../models/user";
 import { Branch } from "../models/branch";
+import { Category } from "../models/category";
 
 const connection = new Sequelize({
   database: "sisweb_db",
@@ -9,12 +10,16 @@ const connection = new Sequelize({
   username: "sisweb_user",
   password: "HDK#$%Ljkwerff.89",
   storage: ":memory:",
-  models: [Product, User, Branch],
+  models: [Product, User, Branch, Category],
 });
 
 async function connectionDB() {
   try {
-    await connection.sync();
+    await connection.authenticate();
+    console.log("Connection has been established successfully.");
+
+    await connection.sync( {alter: true} );
+    console.log("All models were synchronized successfully.");
   } catch (e) {
     console.log(e);
   }

@@ -13,18 +13,22 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const product_1 = require("../models/product");
 const user_1 = require("../models/user");
 const branch_1 = require("../models/branch");
+const category_1 = require("../models/category");
 const connection = new sequelize_typescript_1.Sequelize({
     database: "sisweb_db",
     dialect: "postgres",
     username: "sisweb_user",
     password: "HDK#$%Ljkwerff.89",
     storage: ":memory:",
-    models: [product_1.Product, user_1.User, branch_1.Branch],
+    models: [product_1.Product, user_1.User, branch_1.Branch, category_1.Category],
 });
 function connectionDB() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield connection.sync();
+            yield connection.authenticate();
+            console.log("Connection has been established successfully.");
+            yield connection.sync({ alter: true });
+            console.log("All models were synchronized successfully.");
         }
         catch (e) {
             console.log(e);

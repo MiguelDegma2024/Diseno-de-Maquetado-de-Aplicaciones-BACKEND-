@@ -11,8 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProduct = exports.modifyProduct = exports.getProductById = exports.getAllProducts = exports.createProduct = void 0;
 const product_1 = require("../models/product");
+const category_1 = require("../models/category"); // Importar el modelo Category
 // Create and Save a new Product
-const createProduct = (req, res) => {
+const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Validate request
     if (!req.body) {
         res.status(400).json({
@@ -20,6 +21,18 @@ const createProduct = (req, res) => {
             message: "Content can not be empty.",
             payload: null,
         });
+    }
+    // Verificar que la categoría existe
+    const { categoryId } = req.body;
+    if (categoryId) {
+        const category = yield category_1.Category.findByPk(categoryId);
+        if (!category) {
+            res.status(400).json({
+                status: "error",
+                message: "La categoría especificada no existe",
+                payload: null,
+            });
+        }
     }
     // Save Product in the database
     const product = Object.assign({}, req.body);
@@ -38,12 +51,17 @@ const createProduct = (req, res) => {
             payload: null,
         });
     });
-};
+});
 exports.createProduct = createProduct;
 // Retrieve all Products from the database.
 const getAllProducts = (req, res) => {
-    //Calling the Sequelize findAll method. This is the same that a SELECT * FROM
-    product_1.Product.findAll()
+    // Incluir la relación con Category al obtener los productos
+    product_1.Product.findAll({
+        include: [{
+                model: category_1.Category,
+                attributes: ['id', 'name', 'key'] // Solo incluir los atributos necesarios
+            }]
+    })
         .then((data) => {
         return res.status(200).json({
             status: "success",
