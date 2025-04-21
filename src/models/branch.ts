@@ -9,7 +9,8 @@ import {
   BelongsTo,
 } from "sequelize-typescript";
 import { Optional } from "sequelize";
-import { User } from "./user";
+import { Manager } from "./manager";
+
 
 interface BranchAttributes {
   id: number;
@@ -36,15 +37,12 @@ export class Branch extends Model<BranchAttributes, BranchCreationAttributes> {
   })
   location!: string;
 
-  @ForeignKey(() => User)
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
+  @ForeignKey(() => Manager)
+  @Column(DataType.INTEGER)
   managerId!: number;
 
-  @BelongsTo(() => User)
-  manager!: User;
+  @BelongsTo(() => Manager)
+  manager!: Manager;
 
   @CreatedAt
   @Column

@@ -4,36 +4,52 @@ import { Category } from '../models/category'; // Importar el modelo Category
 
 
 // Create and Save a new Product
-export const createProduct: RequestHandler = async (req: Request, res: Response) => {
+export const createProduct: RequestHandler = (req: Request, res: Response) => {
     // Validate request
     if (!req.body) {
-            res.status(400).json({
+         res.status(400).json({
             status: "error",
             message: "Content can not be empty.",
             payload: null,
         });
     }
 
-            // Verificar que la categoría existe
-            const { categoryId } = req.body;
-            if (categoryId) {
-                const category = await Category.findByPk(categoryId);
-                if (!category) {
-                        res.status(400).json({
-                        status: "error",
-                        message: "La categoría especificada no existe",
-                        payload: null,
-                    });
-                }
+    // Verificar que existe la categoría primero
+    const categoryId = req.body.categoryId;
+    
+    Category.findByPk(categoryId)
+        .then((category) => {
+            if (!category) {
+                res.status(400).json({
+                    status: "error",
+                    message: "La categoría especificada no existe",
+                    payload: null,
+                });
+                return null; // Para detener la cadena de promesas
             }
-// Save Product in the database
-    const product = { ...req.body };
-    Product.create(product)
+            
+            // Save Product in the database
+            const product = { ...req.body };
+            return Product.create(product);
+        })
         .then((data: Product | null) => {
+            if (!data) return null; // Si no hay datos, detener la cadena
+            
+            // Buscar el producto recién creado con su categoría
+            return Product.findByPk(data.id, {
+                include: [{
+                    model: Category,
+                    attributes: ['id', 'name', 'key']
+                }]
+            });
+        })
+        .then((productWithCategory: Product | null) => {
+            if (!productWithCategory) return; // Si no hay producto, detener
+            
             res.status(200).json({
                 status: "success",
                 message: "Product successfully created",
-                payload: data,
+                payload: productWithCategory,
             });
         })
         .catch((err) => {
@@ -42,7 +58,7 @@ export const createProduct: RequestHandler = async (req: Request, res: Response)
                 message: "Something happened creating the product. " + err.message,
                 payload: null,
             });
-       });
+        });
 };
 
 
@@ -92,8 +108,9 @@ export const getProductById: RequestHandler = (req: Request, res: Response) => {
 };
 
 
+
 // Update a Product by the id in the request
-export const modifyProduct:RequestHandler = (req: Request, res: Response) => {
+export const modifyProduct: RequestHandler = (req: Request, res: Response) => {
     // Validate request
     if (!req.body) {
             res.status(400).json({
@@ -102,32 +119,81 @@ export const modifyProduct:RequestHandler = (req: Request, res: Response) => {
             payload: null,
         });
     }
-    // Save Product in the database
-    Product.update({ ...req.body }, { where: { id: req.params.id } })
-    .then((isUpdated) =>{
-        if (isUpdated) {
-            return res.status(200).json({
+    
+    // Check if product exists first
+    Product.findByPk(req.params.id)
+        .then(productExists => {
+            if (!productExists) {
+                res.status(404).json({
+                    status: "error",
+                    message: "Product not found",
+                    payload: null,
+                });
+                throw new Error("Product not found"); // Stop the chain
+            }
+            
+            // If categoryId is provided, verify it exists
+            if (req.body.categoryId) {
+                return Category.findByPk(req.body.categoryId);
+            }
+            return null; // Return null instead of true to maintain consistent return types
+        })
+        .then(categoryResult => {
+            if (req.body.categoryId && categoryResult === null) {
+                res.status(400).json({
+                    status: "error",
+                    message: "La categoría especificada no existe",
+                    payload: null,
+                });
+                throw new Error("Category not found"); // Stop the chain
+            }
+            
+            // Now update the product
+            return Product.update(req.body, { where: { id: req.params.id } });
+        })
+        .then(updateResult => {
+            const [affectedCount] = updateResult;
+            
+            if (affectedCount > 0) {
+                // If product was updated, fetch the updated product
+                return Product.findByPk(req.params.id, {
+                    include: [{
+                        model: Category,
+                        attributes: ['id', 'name', 'key']
+                    }]
+                });
+            } else {
+                res.status(400).json({
+                    status: "error",
+                    message: "No changes applied to the product",
+                    payload: null,
+                });
+                throw new Error("No changes applied"); // Stop the chain
+            }
+        })
+        .then(updatedProduct => {
+            res.status(200).json({
                 status: "success",
                 message: "Product successfully updated",
-                payload: { ...req.body },
+                payload: updatedProduct,
             });
-        }   else {
-            return res.status(500).json({
-                status: "error",
-                message: "Something happened updating the product. " ,
-                payload: null,
-            });
-        }
-    })
-    .catch((err) => {
-        return res.status(500).json({
-            status: "error",
-            message: "Something happened updating the product. " + err.message,
-            payload: null,
+        })
+        .catch((err) => {
+            // Only log and send error response if it wasn't already handled
+            if (
+                err.message !== "Product not found" && 
+                err.message !== "Category not found" && 
+                err.message !== "No changes applied"
+            ) {
+                console.error("Error updating product:", err);
+                res.status(500).json({
+                    status: "error",
+                    message: "Something happened updating the product. " + err.message,
+                    payload: null,
+                });
+            }
         });
-    });
-};
-        
+}; 
 
 
 // Delete a Product with the specified id in the request

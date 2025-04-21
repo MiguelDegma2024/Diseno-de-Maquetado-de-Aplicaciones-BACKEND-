@@ -9,47 +9,41 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Branch = void 0;
+exports.Manager = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
-const manager_1 = require("./manager");
-let Branch = class Branch extends sequelize_typescript_1.Model {
+const branch_1 = require("./branch");
+let Manager = class Manager extends sequelize_typescript_1.Model {
 };
-exports.Branch = Branch;
+exports.Manager = Manager;
 __decorate([
-    (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.STRING,
-        allowNull: false,
-    }),
-    __metadata("design:type", String)
-], Branch.prototype, "name", void 0);
-__decorate([
-    (0, sequelize_typescript_1.Column)({
-        type: sequelize_typescript_1.DataType.STRING,
-        allowNull: false,
-    }),
-    __metadata("design:type", String)
-], Branch.prototype, "location", void 0);
-__decorate([
-    (0, sequelize_typescript_1.ForeignKey)(() => manager_1.Manager),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.INTEGER),
+    sequelize_typescript_1.PrimaryKey,
+    sequelize_typescript_1.AutoIncrement,
+    sequelize_typescript_1.Column,
     __metadata("design:type", Number)
-], Branch.prototype, "managerId", void 0);
+], Manager.prototype, "id", void 0);
 __decorate([
-    (0, sequelize_typescript_1.BelongsTo)(() => manager_1.Manager),
-    __metadata("design:type", manager_1.Manager)
-], Branch.prototype, "manager", void 0);
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
+    __metadata("design:type", String)
+], Manager.prototype, "name", void 0);
+__decorate([
+    sequelize_typescript_1.Unique,
+    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING),
+    __metadata("design:type", String)
+], Manager.prototype, "email", void 0);
 __decorate([
     sequelize_typescript_1.CreatedAt,
     sequelize_typescript_1.Column,
     __metadata("design:type", Date)
-], Branch.prototype, "createdAt", void 0);
+], Manager.prototype, "createdAt", void 0);
 __decorate([
     sequelize_typescript_1.UpdatedAt,
     sequelize_typescript_1.Column,
     __metadata("design:type", Date)
-], Branch.prototype, "updatedAt", void 0);
-exports.Branch = Branch = __decorate([
-    (0, sequelize_typescript_1.Table)({
-        tableName: "Branches",
-    })
-], Branch);
+], Manager.prototype, "updatedAt", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => branch_1.Branch),
+    __metadata("design:type", Array)
+], Manager.prototype, "branches", void 0);
+exports.Manager = Manager = __decorate([
+    (0, sequelize_typescript_1.Table)({ tableName: "Managers" })
+], Manager);
