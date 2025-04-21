@@ -7,10 +7,12 @@ const express_1 = require("express");
 const productRoutes_1 = __importDefault(require("./productRoutes"));
 const branchRoutes_1 = __importDefault(require("./branchRoutes"));
 const userRoutes_1 = __importDefault(require("./userRoutes"));
+const managerRoutes_1 = __importDefault(require("./managerRoutes"));
 const apiRouter = (0, express_1.Router)();
 apiRouter.use("/product", productRoutes_1.default);
 apiRouter.use("/branch", branchRoutes_1.default);
 apiRouter.use("/user", userRoutes_1.default);
+apiRouter.use("/manager", managerRoutes_1.default);
 apiRouter.get("/", (req, res) => {
     res.send("Hello World!");
 });
